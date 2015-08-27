@@ -142,7 +142,7 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 				rm -rf /etc/openvpn
 				rm -rf /usr/share/doc/openvpn*
 				sed -i '/--dport 53 -j REDIRECT --to-port/d' $RCLOCAL
-				sed -i '/iptables -t nat -A POSTROUTING -s 172.16.100.0/d' $RCLOCAL
+				sed -i '/iptables -t nat -A POSTROUTING -s 10.0.100.0/d' $RCLOCAL
 				echo ""
 				echo "OpenVPN removed!"
 			else
@@ -289,11 +289,11 @@ else
 	echo 1 > /proc/sys/net/ipv4/ip_forward
 	# Set iptables
 	if [[ "$INTERNALNETWORK" = 'y' ]]; then
-		iptables -t nat -A POSTROUTING -s 172.16.100.0/24 ! -d 172.16.100.0/24 -j SNAT --to $IP
-		sed -i "1 a\iptables -t nat -A POSTROUTING -s 172.16.100.0/24 ! -d 172.16.100.0/24 -j SNAT --to $IP" $RCLOCAL
+		iptables -t nat -A POSTROUTING -s 10.0.100.0/24 ! -d 10.0.100.0/24 -j SNAT --to $IP
+		sed -i "1 a\iptables -t nat -A POSTROUTING -s 10.0.100.0/24 ! -d 10.0.100.0/24 -j SNAT --to $IP" $RCLOCAL
 	else
-		iptables -t nat -A POSTROUTING -s 172.16.100.0/24 -j SNAT --to $IP
-		sed -i "1 a\iptables -t nat -A POSTROUTING -s 172.16.100.0/24 -j SNAT --to $IP" $RCLOCAL
+		iptables -t nat -A POSTROUTING -s 10.0.100.0/24 -j SNAT --to $IP
+		sed -i "1 a\iptables -t nat -A POSTROUTING -s 10.0.100.0/24 -j SNAT --to $IP" $RCLOCAL
 	fi
 	# And finally, restart OpenVPN
 	if [[ "$OS" = 'debian' ]]; then
